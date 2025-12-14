@@ -1,13 +1,34 @@
 {
   "name": "next-level-assignment-2",
   "version": "1.0.0",
-  "description": "",
+  "description": "��#\u0000 \u0000N\u0000e\u0000x\u0000t\u0000-\u0000L\u0000e\u0000v\u0000e\u0000l\u0000-\u0000a\u0000s\u0000s\u0000i\u0000g\u0000n\u0000m\u0000e\u0000n\u0000t\u0000-\u00002\u0000\r\u0000 \u0000#\u0000 \u0000N\u0000e\u0000x\u0000t\u0000-\u0000L\u0000e\u0000v\u0000e\u0000l\u0000-\u0000a\u0000s\u0000s\u0000i\u0000g\u0000n\u0000m\u0000e\u0000n\u0000t\u0000-\u00002\u0000\r\u0000 \u0000",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "npx tsx watch ./src/server.ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/johirul07/Next-Level-assignment-2.git"
+  },
+  "bugs": {
+    "url": "https://github.com/johirul07/Next-Level-assignment-2/issues"
+  },
+  "homepage": "https://github.com/johirul07/Next-Level-assignment-2#readme",
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/node": "^25.0.2",
+    "@types/pg": "^8.16.0",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1",
+    "pg": "^8.16.3"
+  }
 }
