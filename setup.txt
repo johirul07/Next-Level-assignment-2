@@ -8,3 +8,6 @@ npm i --save-dev @types/express -> express importe korar por
 npm i -D tsx
 npm i pg
 npm i --save-dev @types/pg
+npm i bcryptjs
+npm i jsonwebtoken
+npm i --save-dev @types/jsonwebtoken
