@@ -9,7 +9,7 @@ const signupUser = async (payload: Record<string, unknown>) => {
   const hasPassword = await bcrypt.hash(password as string, 10);
 
   const result = await pool.query(
-    `INSERT INTO users (name, email, password, phone, role) VALUES ($1, $2, $3, $4, $5) RETURNING *`,
+    `INSERT INTO users (name, email, password, phone, role) VALUES ($1, $2, $3, $4, $5) RETURNING id, name, email, phone, role, created_at, updated_at`,
     [name, email, hasPassword, phone, role]
   );
 
@@ -24,7 +24,7 @@ const signinUser = async (payload: Record<string, unknown>) => {
   ]);
 
   if (result.rows.length === 0) {
-    return null;
+    throw new Error("User not found");
   }
 
   const user = result.rows[0];
@@ -32,7 +32,7 @@ const signinUser = async (payload: Record<string, unknown>) => {
   const match = await bcrypt.compare(password as string, user.password);
 
   if (!match) {
-    return false;
+    throw new Error("Invalid credentials");
   }
 
   const secret = config.JWT_SECRET as string;

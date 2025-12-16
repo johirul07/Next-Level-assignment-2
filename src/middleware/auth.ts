@@ -6,3 +6,5 @@ const auth = () => {
     return next();
   };
 };
+
+export default auth;
