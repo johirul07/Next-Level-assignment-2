@@ -5,17 +5,18 @@ import config from "../config";
 const auth = (...roles: string[]) => {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const token = req.headers.authorization;
+      const authHeader = req.headers.authorization;
       // console.log({ authToken: token });
-      if (!token) {
+      if (!authHeader) {
         return res.status(401).json({ message: "Unauthorized" });
       }
 
+      const token = authHeader?.split(" ")[1];
+
       const decoded = jwt.verify(
-        token,
+        token as string,
         config.JWT_SECRET as string
       ) as JwtPayload;
-
 
       req.user = decoded;
 

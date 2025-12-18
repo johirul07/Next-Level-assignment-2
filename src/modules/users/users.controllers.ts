@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { usersServices } from "./users.services";
+import { JwtPayload } from "jsonwebtoken";
 
 const getUsers = async (req: Request, res: Response) => {
   try {
@@ -20,23 +21,43 @@ const getUsers = async (req: Request, res: Response) => {
 
 const updateUsers = async (req: Request, res: Response) => {
   try {
+    const loggedInUser = req.user;
+    const targetUserId = req.params.userId;
+
+    if (
+      !loggedInUser ||
+      (loggedInUser.role !== "admin" && loggedInUser.userId !== targetUserId)
+    ) {
+      return res.status(403).json({
+        success: false,
+        message: "Forbidden: You can only update your own profile",
+      });
+    }
+
+    if (loggedInUser.role !== "admin" && req.body.role) {
+      return res.status(403).json({
+        success: false,
+        message: "Forbidden: You cannot change your role",
+      });
+    }
+
     const result = await usersServices.updateUsers({
       ...req.body,
-      id: req.params.userId,
+      id: targetUserId,
     });
 
     if (result.rows.length === 0) {
-      res.status(404).json({
+      return res.status(404).json({
         success: false,
         message: "User not found",
       });
-    } else {
-      res.status(200).json({
-        message: "User updated successfully",
-        success: true,
-        data: result.rows[0],
-      });
     }
+
+    return res.status(200).json({
+      success: true,
+      message: "User updated successfully",
+      data: result.rows[0],
+    });
   } catch (err: any) {
     res.status(500).json({
       success: false,
@@ -51,18 +72,18 @@ const deleteUser = async (req: Request, res: Response) => {
       userId: req.params.userId,
     });
 
-    if (result.rowCount === 0) {
-      res.status(404).json({
+    if (result.rows.length === 0) {
+      return res.status(404).json({
         success: false,
-        message: " User not found",
-      });
-    } else {
-      res.status(200).json({
-        success: true,
-        message: "User deleted successfully",
-        data: null,
+        message: "User not found",
       });
     }
+
+    return res.status(200).json({
+      success: true,
+      message: "User updated successfully",
+      data: result.rows[0],
+    });
   } catch (err: any) {
     res.status(500).json({
       success: false,
