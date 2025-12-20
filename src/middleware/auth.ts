@@ -18,7 +18,10 @@ const auth = (...roles: string[]) => {
         config.JWT_SECRET as string
       ) as JwtPayload;
 
-      req.user = decoded;
+      req.user = {
+        id: decoded.id,
+        role: decoded.role,
+      };
 
       if (roles.length && !roles.includes(decoded.role as string)) {
         return res.status(401).json({ message: "Unauthorized" });

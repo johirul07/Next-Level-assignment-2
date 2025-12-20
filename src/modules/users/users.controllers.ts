@@ -22,11 +22,12 @@ const getUsers = async (req: Request, res: Response) => {
 const updateUsers = async (req: Request, res: Response) => {
   try {
     const loggedInUser = req.user;
-    const targetUserId = req.params.userId;
+    const targetUserId = Number(req.params.userId);
 
     if (
       !loggedInUser ||
-      (loggedInUser.role !== "admin" && loggedInUser.userId !== targetUserId)
+      (loggedInUser.role !== "admin" &&
+        loggedInUser.id !== Number(targetUserId))
     ) {
       return res.status(403).json({
         success: false,
@@ -68,11 +69,11 @@ const updateUsers = async (req: Request, res: Response) => {
 
 const deleteUser = async (req: Request, res: Response) => {
   try {
-    const result = await usersServices.deleteUser({
-      userId: req.params.userId,
-    });
+    const userId = Number(req.params.userId);
 
-    if (result.rows.length === 0) {
+    const result = await usersServices.deleteUser(userId!);
+
+    if (result.rowCount === 0) {
       return res.status(404).json({
         success: false,
         message: "User not found",
@@ -81,16 +82,17 @@ const deleteUser = async (req: Request, res: Response) => {
 
     return res.status(200).json({
       success: true,
-      message: "User updated successfully",
-      data: result.rows[0],
+      message: "User deleted successfully",
+      data: null,
     });
   } catch (err: any) {
-    res.status(500).json({
+    return res.status(400).json({
       success: false,
       message: err.message,
     });
   }
 };
+
 
 export const usersControllers = {
   getUsers,
