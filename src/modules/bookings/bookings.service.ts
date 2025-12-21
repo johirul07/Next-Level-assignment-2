@@ -145,27 +145,31 @@ const updateBooking = async (payload: UpdateBookingPayload) => {
 
   const booking = bookingRes.rows[0];
 
-  if (user.role !== "customer") {
+  if (booking.status === "cancelled") {
+    throw new Error("Cancelled booking cannot be updated");
+  }
+
+  if (user.role === "customer") {
     if (booking.customer_id !== user.id) {
       throw new Error("Unauthorized to update this booking");
     }
 
-    if (status === "cancelled") {
-      throw new Error("Only customers can cancel bookings");
+    if (status !== "cancelled") {
+      throw new Error("Customer can only cancel booking");
     }
 
-    const newDate = new Date();
-
+    const now = new Date();
     const startDate = new Date(booking.rent_start_date);
 
-    if (newDate >= startDate) {
+    if (now >= startDate) {
       throw new Error("Cannot cancel booking after rental period has started");
     }
   }
 
+
   if (user.role === "admin") {
     if (status !== "returned") {
-      throw new Error("Only admin can update booking status to returned");
+      throw new Error("Admin can only mark booking as returned");
     }
   }
 

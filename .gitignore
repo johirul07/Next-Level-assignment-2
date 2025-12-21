@@ -71,3 +71,6 @@ Desktop.ini
 # Prisma / DB
 prisma/dev.db
 prisma/dev.db-journal
+
+dist
+.vercel

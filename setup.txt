@@ -11,3 +11,5 @@ npm i --save-dev @types/pg
 npm i bcryptjs
 npm i jsonwebtoken
 npm i --save-dev @types/jsonwebtoken
+npm i -g vercel
+vercel login
